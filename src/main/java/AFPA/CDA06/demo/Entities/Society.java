@@ -23,6 +23,7 @@ public abstract class Society {
     private String email;
     private String comments;
 
+
     public Society(){}
 
     public Society(int ID, String compagnyName, String streetNumber,
