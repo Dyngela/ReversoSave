@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="AFPA.CDA06.demo.AppTest" time="0.081" tests="7" errors="0" skipped="0" failures="3">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="AFPA.CDA06.demo.AppTest" time="0.025" tests="1" errors="0" skipped="0" failures="0">
   <properties>
     <property name="sun.desktop" value="windows"/>
     <property name="awt.toolkit" value="sun.awt.windows.WToolkit"/>
     <property name="java.specification.version" value="11"/>
     <property name="sun.cpu.isalist" value="amd64"/>
     <property name="sun.jnu.encoding" value="Cp1252"/>
-    <property name="java.class.path" value="D:\Dev\Maven\Projets_AFPA\ReversoBis\target\test-classes;D:\Dev\Maven\Projets_AFPA\ReversoBis\target\classes;D:\Dev\Maven\Repository\org\junit\jupiter\junit-jupiter-api\5.6.0\junit-jupiter-api-5.6.0.jar;D:\Dev\Maven\Repository\org\apiguardian\apiguardian-api\1.1.0\apiguardian-api-1.1.0.jar;D:\Dev\Maven\Repository\org\opentest4j\opentest4j\1.2.0\opentest4j-1.2.0.jar;D:\Dev\Maven\Repository\org\junit\platform\junit-platform-commons\1.6.0\junit-platform-commons-1.6.0.jar;D:\Dev\Maven\Repository\org\junit\jupiter\junit-jupiter-engine\5.6.0\junit-jupiter-engine-5.6.0.jar;D:\Dev\Maven\Repository\org\junit\platform\junit-platform-engine\1.6.0\junit-platform-engine-1.6.0.jar;D:\Dev\Maven\Repository\org\junit\jupiter\junit-jupiter-params\5.6.0\junit-jupiter-params-5.6.0.jar;D:\Dev\Maven\Repository\com\intellij\forms_rt\7.0.3\forms_rt-7.0.3.jar;D:\Dev\Maven\Repository\asm\asm-commons\3.0\asm-commons-3.0.jar;D:\Dev\Maven\Repository\asm\asm-tree\3.0\asm-tree-3.0.jar;D:\Dev\Maven\Repository\asm\asm\3.0\asm-3.0.jar;D:\Dev\Maven\Repository\com\jgoodies\forms\1.1-preview\forms-1.1-preview.jar;D:\Dev\Maven\Repository\jdom\jdom\1.0\jdom-1.0.jar;D:\Dev\Maven\Repository\org\junit\jupiter\junit-jupiter\5.4.0\junit-jupiter-5.4.0.jar;"/>
+    <property name="java.class.path" value="D:\Dev\Maven\Projets_AFPA\ReversoBis\target\test-classes;D:\Dev\Maven\Projets_AFPA\ReversoBis\target\classes;D:\Dev\Maven\Repository\junit\junit\4.11\junit-4.11.jar;D:\Dev\Maven\Repository\org\hamcrest\hamcrest-core\1.3\hamcrest-core-1.3.jar;D:\Dev\Maven\Repository\com\intellij\forms_rt\7.0.3\forms_rt-7.0.3.jar;D:\Dev\Maven\Repository\asm\asm-commons\3.0\asm-commons-3.0.jar;D:\Dev\Maven\Repository\asm\asm-tree\3.0\asm-tree-3.0.jar;D:\Dev\Maven\Repository\asm\asm\3.0\asm-3.0.jar;D:\Dev\Maven\Repository\com\jgoodies\forms\1.1-preview\forms-1.1-preview.jar;D:\Dev\Maven\Repository\jdom\jdom\1.0\jdom-1.0.jar;"/>
     <property name="java.vm.vendor" value="Oracle Corporation"/>
     <property name="sun.arch.data.model" value="64"/>
     <property name="user.variant" value=""/>
@@ -17,9 +17,9 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="FR"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk-11.0.9\bin"/>
-    <property name="sun.java.command" value="C:\Users\Erwan\AppData\Local\Temp\surefire18329011723853471382\surefirebooter3723887888090483268.jar C:\Users\Erwan\AppData\Local\Temp\surefire18329011723853471382 2021-02-09T15-42-02_653-jvmRun1 surefire18423216306161006945tmp surefire_017832091301352035680tmp"/>
+    <property name="sun.java.command" value="C:\Users\Erwan\AppData\Local\Temp\surefire7321403170485711647\surefirebooter4089266106607669059.jar C:\Users\Erwan\AppData\Local\Temp\surefire7321403170485711647 2021-02-09T16-02-06_219-jvmRun1 surefire8980079768160033426tmp surefire_017764268546102771500tmp"/>
     <property name="jdk.debug" value="release"/>
-    <property name="surefire.test.class.path" value="D:\Dev\Maven\Projets_AFPA\ReversoBis\target\test-classes;D:\Dev\Maven\Projets_AFPA\ReversoBis\target\classes;D:\Dev\Maven\Repository\org\junit\jupiter\junit-jupiter-api\5.6.0\junit-jupiter-api-5.6.0.jar;D:\Dev\Maven\Repository\org\apiguardian\apiguardian-api\1.1.0\apiguardian-api-1.1.0.jar;D:\Dev\Maven\Repository\org\opentest4j\opentest4j\1.2.0\opentest4j-1.2.0.jar;D:\Dev\Maven\Repository\org\junit\platform\junit-platform-commons\1.6.0\junit-platform-commons-1.6.0.jar;D:\Dev\Maven\Repository\org\junit\jupiter\junit-jupiter-engine\5.6.0\junit-jupiter-engine-5.6.0.jar;D:\Dev\Maven\Repository\org\junit\platform\junit-platform-engine\1.6.0\junit-platform-engine-1.6.0.jar;D:\Dev\Maven\Repository\org\junit\jupiter\junit-jupiter-params\5.6.0\junit-jupiter-params-5.6.0.jar;D:\Dev\Maven\Repository\com\intellij\forms_rt\7.0.3\forms_rt-7.0.3.jar;D:\Dev\Maven\Repository\asm\asm-commons\3.0\asm-commons-3.0.jar;D:\Dev\Maven\Repository\asm\asm-tree\3.0\asm-tree-3.0.jar;D:\Dev\Maven\Repository\asm\asm\3.0\asm-3.0.jar;D:\Dev\Maven\Repository\com\jgoodies\forms\1.1-preview\forms-1.1-preview.jar;D:\Dev\Maven\Repository\jdom\jdom\1.0\jdom-1.0.jar;D:\Dev\Maven\Repository\org\junit\jupiter\junit-jupiter\5.4.0\junit-jupiter-5.4.0.jar;"/>
+    <property name="surefire.test.class.path" value="D:\Dev\Maven\Projets_AFPA\ReversoBis\target\test-classes;D:\Dev\Maven\Projets_AFPA\ReversoBis\target\classes;D:\Dev\Maven\Repository\junit\junit\4.11\junit-4.11.jar;D:\Dev\Maven\Repository\org\hamcrest\hamcrest-core\1.3\hamcrest-core-1.3.jar;D:\Dev\Maven\Repository\com\intellij\forms_rt\7.0.3\forms_rt-7.0.3.jar;D:\Dev\Maven\Repository\asm\asm-commons\3.0\asm-commons-3.0.jar;D:\Dev\Maven\Repository\asm\asm-tree\3.0\asm-tree-3.0.jar;D:\Dev\Maven\Repository\asm\asm\3.0\asm-3.0.jar;D:\Dev\Maven\Repository\com\jgoodies\forms\1.1-preview\forms-1.1-preview.jar;D:\Dev\Maven\Repository\jdom\jdom\1.0\jdom-1.0.jar;"/>
     <property name="sun.cpu.endian" value="little"/>
     <property name="user.home" value="C:\Users\Erwan"/>
     <property name="user.language" value="fr"/>
@@ -33,7 +33,7 @@
     <property name="java.specification.name" value="Java Platform API Specification"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.awt.graphicsenv" value="sun.awt.Win32GraphicsEnvironment"/>
-    <property name="surefire.real.class.path" value="C:\Users\Erwan\AppData\Local\Temp\surefire18329011723853471382\surefirebooter3723887888090483268.jar"/>
+    <property name="surefire.real.class.path" value="C:\Users\Erwan\AppData\Local\Temp\surefire7321403170485711647\surefirebooter4089266106607669059.jar"/>
     <property name="user.script" value=""/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="11.0.9+7-LTS"/>
@@ -60,23 +60,5 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="55.0"/>
   </properties>
-  <testcase name="invalidFormatMail{String}[1]" classname="AFPA.CDA06.demo.AppTest" time="0.031"/>
-  <testcase name="invalidFormatMail{String}[2]" classname="AFPA.CDA06.demo.AppTest" time="0"/>
-  <testcase name="invalidFormatMail{String}[3]" classname="AFPA.CDA06.demo.AppTest" time="0.001"/>
-  <testcase name="invalidFormatMail{String}[4]" classname="AFPA.CDA06.demo.AppTest" time="0.001"/>
-  <testcase name="invalidFormatMail{String}[5]" classname="AFPA.CDA06.demo.AppTest" time="0.007">
-    <failure message="Expected AFPA.CDA06.demo.Exception.ExceptionHandler to be thrown, but nothing was thrown." type="org.opentest4j.AssertionFailedError">org.opentest4j.AssertionFailedError: Expected AFPA.CDA06.demo.Exception.ExceptionHandler to be thrown, but nothing was thrown.
-	at AFPA.CDA06.demo.AppTest.invalidFormatMail(AppTest.java:29)
-</failure>
-  </testcase>
-  <testcase name="invalidFormatMail{String}[6]" classname="AFPA.CDA06.demo.AppTest" time="0.001">
-    <failure message="Expected AFPA.CDA06.demo.Exception.ExceptionHandler to be thrown, but nothing was thrown." type="org.opentest4j.AssertionFailedError">org.opentest4j.AssertionFailedError: Expected AFPA.CDA06.demo.Exception.ExceptionHandler to be thrown, but nothing was thrown.
-	at AFPA.CDA06.demo.AppTest.invalidFormatMail(AppTest.java:29)
-</failure>
-  </testcase>
-  <testcase name="valueNullOrEmptyCompagnyName" classname="AFPA.CDA06.demo.AppTest" time="0.001">
-    <failure message="Expected AFPA.CDA06.demo.Exception.ExceptionHandler to be thrown, but nothing was thrown." type="org.opentest4j.AssertionFailedError">org.opentest4j.AssertionFailedError: Expected AFPA.CDA06.demo.Exception.ExceptionHandler to be thrown, but nothing was thrown.
-	at AFPA.CDA06.demo.AppTest.valueNullOrEmptyCompagnyName(AppTest.java:36)
-</failure>
-  </testcase>
+  <testcase name="shouldAnswerWithTrue" classname="AFPA.CDA06.demo.AppTest" time="0.001"/>
 </testsuite>

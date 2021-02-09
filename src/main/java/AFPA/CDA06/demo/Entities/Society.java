@@ -22,6 +22,9 @@ public abstract class Society {
     private String phoneNumber;
     private String email;
     private String comments;
+    private final String regex = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
+    Pattern pattern = Pattern.compile(regex);
+
 
 
     public Society(){}
@@ -96,7 +99,8 @@ public abstract class Society {
         if(email == null || email.isEmpty()){
             throw new ExceptionHandler("Mail field isn't filled");
         }
-        if(!email.contains("@")){
+        Matcher matcher = pattern.matcher(email);
+        if(!matcher.matches()){
             throw new ExceptionHandler("Mail adress doesn't contain '@'.");
         }
         this.email = email;
