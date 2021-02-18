@@ -1,7 +1,14 @@
 package AFPA.CDA06.demo.Entities;
 
 
+import AFPA.CDA06.demo.DAO.DAOClient;
+import AFPA.CDA06.demo.DAO.DAOContract;
 import AFPA.CDA06.demo.Exception.ExceptionHandler;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.util.ArrayList;
 
 /**
  * Class inherited from Society
@@ -14,8 +21,14 @@ public class Client extends Society{
     private double grossSales;
     private int numberOfEmployeesOnAverage;
     public static int IDClientCount = 0;
+    private static final Logger LOGGER = LogManager.getLogger(DAOClient.class.getName());
 
-    public Client(int ID, String compagnyName, String streetNumber,
+    private int ID_Contact;
+    private String contract_Name;
+    private Double contract_Amount;
+
+
+    public Client(Integer ID, String compagnyName, String streetNumber,
                   String streetName, String postalCode, String city,
                   String phoneNumber, String email, String comments,
                   double grossSales, int numberOfEmployeesOnAverage)
@@ -27,9 +40,11 @@ public class Client extends Society{
         this.setGrossSales(grossSales);
         this.setNumberOfEmployeesOnAverage(numberOfEmployeesOnAverage);
         this.setID(IDClientCount);
-        IDClientCount++;
-
     }
+
+    public Client() {}
+    public Client(Integer id) {}
+
 
     public void setNumberOfEmployeesOnAverage(int numberOfEmployeesOnAverage) throws ExceptionHandler{
 
@@ -61,9 +76,36 @@ public class Client extends Society{
         return IDClientCount;
     }
 
+    public void setID_Contact(int ID_Contact) {
+        this.ID_Contact = ID_Contact;
+    }
+    public void setContract_Name(String contract_Name) {
+        this.contract_Name = contract_Name;
+    }
+    public void setContract_Amount(Double contract_Amount) {
+        this.contract_Amount = contract_Amount;
+    }
+
+
+    public int getID_Contact(){return ID_Contact;}
+    public String getContract_Name(){return contract_Name;}
+    public Double getContract_Amount(){return contract_Amount;}
+
     @Override
     public String toString() {
         return super.toString() + "\nchiffre d'affaire : " + this.grossSales +
-                "\nnombre d'employé moyen : " + this.numberOfEmployeesOnAverage + "\n";
+                "\nnombre d'employé moyen : " + this.numberOfEmployeesOnAverage + "\n IDContract : " + getID_Contact()
+                + " Contract name : " + getContract_Name() + " contract amount : " + getContract_Amount();
     }
+
+
+    /**
+     * List of contracts with an ID_Client linked.
+     */
+    public static ArrayList<Contract> contractList = new ArrayList<>();
+    public ArrayList<Contract> getClientList() {
+        return contractList;
+    }
+
+
 }

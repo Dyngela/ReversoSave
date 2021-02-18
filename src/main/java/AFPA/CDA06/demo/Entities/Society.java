@@ -22,7 +22,7 @@ public abstract class Society {
     private String phoneNumber;
     private String email;
     private String comments;
-    private final String regex = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
+    private final String regex = "^[A-Za-z0-9+_.-]+@(.+)$";
     Pattern pattern = Pattern.compile(regex);
 
 
@@ -51,7 +51,7 @@ public abstract class Society {
 
     }
     public void setCompagnyName(String compagnyName) throws ExceptionHandler{
-        if(compagnyName == null || compagnyName.isEmpty()){
+        if(compagnyName == null || compagnyName.isEmpty() || compagnyName.contains("\r") || compagnyName.equals("\n") || compagnyName.equals(" ")){
             throw new ExceptionHandler("Society's name isn't filled.");
         }
         this.compagnyName = compagnyName;

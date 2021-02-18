@@ -1,9 +1,13 @@
 package AFPA.CDA06.demo.Swing;
 
+import AFPA.CDA06.demo.DAO.ConnexionManager;
+import AFPA.CDA06.demo.DAO.DAOClient;
+import AFPA.CDA06.demo.DAO.DAOProspect;
 import AFPA.CDA06.demo.Entities.Client;
 import AFPA.CDA06.demo.Entities.Prospected;
 import AFPA.CDA06.demo.Exception.ExceptionHandler;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,8 +18,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.format.FormatStyle;
 
-import static AFPA.CDA06.demo.Entities.ArrayListClient.clientList;
-import static AFPA.CDA06.demo.Entities.ArrayListProspect.prospectedList;
+import static AFPA.CDA06.demo.Entities.ArrayListClientDAO.clientArrayList;
+import static AFPA.CDA06.demo.Entities.ArrayListProspectDAO.prospectedArrayList;
 
 public class CreateModifyDeleteFrame extends JFrame {
 
@@ -46,6 +50,9 @@ public class CreateModifyDeleteFrame extends JFrame {
     private JLabel numberOfEmployeeOrInterestedLabel;
     private JLabel grossSaleOrDateLabel;
     private JLabel commentLabel;
+    private JButton buttonExit;
+
+    private static final Logger LOGGER = LogManager.getLogger(CreateModifyDeleteFrame.class.getName());
 
 
 
@@ -90,6 +97,14 @@ public class CreateModifyDeleteFrame extends JFrame {
                         CreateModifyDeleteFrame.this.backToBaseScreen(event);
                     }
                 });
+
+                buttonExit.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent event) {
+                        CreateModifyDeleteFrame.this.exit(event);
+                    }
+                });
+
                 cancelButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent event) {
@@ -105,12 +120,15 @@ public class CreateModifyDeleteFrame extends JFrame {
                 screenSetting();
                 IDTextField.setEditable(false);
 
+                //maxIDClient actually look for a table who register the last id of client table.
+                // We do + 1 to display the next ID we're going to create if user confirm creation
+                IDTextField.setText(String.valueOf(DAOClient.maxIDClient() + 1));
+
                 comboBoxYesOrNo.setVisible(false);
                 confirmationPanel.setVisible(false);
 
                 createDelModButton.setText("Create");
-                //Incrementing the ID for each client created.
-                IDTextField.setText(String.valueOf(Client.setIDClientCount(Client.getIDClientCount())));
+
 
                 buttonHomePage.addActionListener(new ActionListener() {
                     @Override
@@ -118,6 +136,13 @@ public class CreateModifyDeleteFrame extends JFrame {
                         CreateModifyDeleteFrame.this.backToBaseScreen(event);
                     }
                 });
+                buttonExit.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent event) {
+                        CreateModifyDeleteFrame.this.exit(event);
+                    }
+                });
+
                 cancelButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent event) {
@@ -161,7 +186,9 @@ public class CreateModifyDeleteFrame extends JFrame {
                 buttonYes.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        clientList.remove(selectedClient);
+                        clientArrayList.remove(selectedClient);
+                        //call the DAODelete to actually delete it in the database
+                        DAOClient.delete(selectedClient);
                     }
                 });
                 buttonYes.addActionListener(new ActionListener() {
@@ -180,6 +207,12 @@ public class CreateModifyDeleteFrame extends JFrame {
                     @Override
                     public void actionPerformed(ActionEvent event) {
                         CreateModifyDeleteFrame.this.backToBaseScreen(event);
+                    }
+                });
+                buttonExit.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent event) {
+                        CreateModifyDeleteFrame.this.exit(event);
                     }
                 });
                 cancelButton.addActionListener(new ActionListener() {
@@ -224,7 +257,7 @@ public class CreateModifyDeleteFrame extends JFrame {
 
                 comboBoxYesOrNo.addItem("Yes");
                 comboBoxYesOrNo.addItem("No");
-                String prospectedInterested = prospectedList.get(prospectedList.indexOf(selectedProspect)).
+                String prospectedInterested = prospectedArrayList.get(prospectedArrayList.indexOf(selectedProspect)).
                         getProspectedInterested(); // 0 ou 1, 0 for "Yes", 1 for "No"
                 if (prospectedInterested.equals("Yes")) {
                     comboBoxYesOrNo.getModel().setSelectedItem("Yes");
@@ -244,6 +277,13 @@ public class CreateModifyDeleteFrame extends JFrame {
                         CreateModifyDeleteFrame.this.backToBaseScreen(event);
                     }
                 });
+                buttonExit.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent event) {
+                    CreateModifyDeleteFrame.this.exit(event);
+                }
+                });
+
                 cancelButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent event) {
@@ -263,8 +303,9 @@ public class CreateModifyDeleteFrame extends JFrame {
                 numberOfEmployeesOnTextField.setVisible(false);
 
                 titleLabel.setText("Creation of a new prospect : ");
-                IDTextField.setText(String.valueOf(Prospected.setIDProspectedCount
-                        (Prospected.getIDProspectedCount())));
+                //maxIDClient actually look for a table who register the last id of client table.
+                // We do + 1 to display the next ID we're going to create if user confirm creation
+                IDTextField.setText(String.valueOf(DAOProspect.maxIDProspect() + 1));
                 grossSaleOrDateLabel.setText("Date of prospection :");
                 numberOfEmployeeOrInterestedLabel.setText("Interested : ");
                 createDelModButton.setText("Create");
@@ -278,6 +319,13 @@ public class CreateModifyDeleteFrame extends JFrame {
                         CreateModifyDeleteFrame.this.backToBaseScreen(event);
                     }
                 });
+                buttonExit.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent event) {
+                        CreateModifyDeleteFrame.this.exit(event);
+                    }
+                });
+
                 cancelButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent event) {
@@ -319,13 +367,17 @@ public class CreateModifyDeleteFrame extends JFrame {
                 createDelModButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent event) {
+                        System.out.println("Buttoncreatedel");
+
                         CreateModifyDeleteFrame.this.closeConfirmationPanel(event);
                     }
                 });
                 buttonYes.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        prospectedList.remove(selectedProspect);
+                        prospectedArrayList.remove(selectedProspect);
+                        //call the DAODelete to actually delete it in the database
+                        DAOProspect.delete(selectedProspect);
                     }
                 });
                 buttonHomePage.addActionListener(new ActionListener() {
@@ -334,6 +386,13 @@ public class CreateModifyDeleteFrame extends JFrame {
                         CreateModifyDeleteFrame.this.backToBaseScreen(event);
                     }
                 });
+                buttonExit.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent event) {
+                        CreateModifyDeleteFrame.this.exit(event);
+                    }
+                });
+
                 cancelButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent event) {
@@ -395,7 +454,7 @@ public class CreateModifyDeleteFrame extends JFrame {
         // to our set of rules. If they are a new client is created
         try {
 
-            int ID = Client.setIDClientCount(Client.getIDClientCount());
+            int ID = Integer.parseInt(IDTextField.getText());
             String compagnyName = compagnySNameTextField.getText();
             String comment = commentsTextField.getText();
             String city = cityTextField.getText();
@@ -409,6 +468,9 @@ public class CreateModifyDeleteFrame extends JFrame {
 
             client = new Client(ID, compagnyName, streetNumber, streetName, postalCode,
                     city, phoneNumber, email, comment, grossSale, numberOfEmployees);
+            //we give all the information of the fields, contain into the object client.
+            // In the DAO we extract those information and make the necessary update
+            DAOClient.create(client);
 
             backToBaseScreen();
         } catch (NumberFormatException e) {
@@ -419,6 +481,7 @@ public class CreateModifyDeleteFrame extends JFrame {
             confirmationDeletingLabel.setText("Gross sale and number of employees fields have to be filled");
             confirmationDeletingLabel.setFont(new Font("Serif", Font.PLAIN, 20));
             confirmationDeletingLabel.setForeground(Color.red);
+            LOGGER.error("Error with create on Gross sale or number of employee text field input : " + e);
 
         } catch (ExceptionHandler eh) {
             confirmationPanel.setVisible(true);
@@ -428,9 +491,10 @@ public class CreateModifyDeleteFrame extends JFrame {
             confirmationDeletingLabel.setText("Error : " + eh.getMessage());
             confirmationDeletingLabel.setFont(new Font("Serif", Font.PLAIN, 20));
             confirmationDeletingLabel.setForeground(Color.red);
+            LOGGER.error("Error with ExceptionHandler in confirmCreationOfANewClient : " + eh);
 
         } catch (Exception e) {
-            System.out.println("Exception inconnu");
+            LOGGER.fatal("Error create client, exception inconnu : " + e);
             System.exit(1);
         }
     }
@@ -443,6 +507,7 @@ public class CreateModifyDeleteFrame extends JFrame {
 
         // getting all the information typed by user in the TextFields, and we check if they are conform
         // to our set of rules. If they arethe client selected in the main page is modified
+        int ID = Integer.parseInt(IDTextField.getText());
         String compagnyName = compagnySNameTextField.getText();
         double grossSale;
         int nbrEmployee;
@@ -455,7 +520,6 @@ public class CreateModifyDeleteFrame extends JFrame {
         String phoneNumber = phoneNumberTextField.getText();
 
         try {
-
             grossSale = Double.parseDouble(grossSaleOrDateTextField.getText());
             nbrEmployee = Integer.parseInt(numberOfEmployeesOnTextField.getText());
             selectedClient.setCompagnyName(compagnyName);
@@ -468,6 +532,10 @@ public class CreateModifyDeleteFrame extends JFrame {
             selectedClient.setPostalCode(postalCode);
             selectedClient.setEmail(email);
             selectedClient.setPhoneNumber(phoneNumber);
+
+            //get the information into client and his id to update the right client
+            DAOClient.save(selectedClient, ID);
+
             backToBaseScreen();
 
         } catch (NumberFormatException e) {
@@ -478,7 +546,7 @@ public class CreateModifyDeleteFrame extends JFrame {
             confirmationDeletingLabel.setText("Gross sale and number of employees fields have to be filled");
             confirmationDeletingLabel.setFont(new Font("Serif", Font.PLAIN, 20));
             confirmationDeletingLabel.setForeground(Color.red);
-
+            LOGGER.error("Error with modify on Gross sale or number of employee text field input : " + e);
 
         } catch (ExceptionHandler eh) {
             confirmationPanel.setVisible(true);
@@ -488,10 +556,9 @@ public class CreateModifyDeleteFrame extends JFrame {
             confirmationDeletingLabel.setText("Error : " + eh.getMessage());
             confirmationDeletingLabel.setFont(new Font("Serif", Font.PLAIN, 20));
             confirmationDeletingLabel.setForeground(Color.red);
-
-
+            LOGGER.error("Error with ExceptionHandler in modifyClient : " + eh);
         } catch (Exception e) {
-            System.out.println("Exception inconnu");
+            LOGGER.fatal("Error modify client, exception inconnu : " + e);
             System.exit(1);
         }
     }
@@ -559,11 +626,11 @@ public class CreateModifyDeleteFrame extends JFrame {
      */
     private void confirmCreationOfANewProspect(ActionEvent event) {
 
-        Prospected item;
+        Prospected prospect;
         // getting all the information typed by user in the TextFields, and we check if they are conform
         // to our set of rules. If they are a new prospect is created
         try {
-            int ID = Prospected.setIDProspectedCount(Prospected.getIDProspectedCount());
+            int ID = Integer.parseInt(IDTextField.getText());
             String compagnyName = compagnySNameTextField.getText();
             String comment = commentsTextField.getText();
             String city = cityTextField.getText();
@@ -578,9 +645,12 @@ public class CreateModifyDeleteFrame extends JFrame {
             String date = grossSaleOrDateTextField.getText();
             LocalDate dateOfProspection = LocalDate.parse(date, formatter);
 
-            item = new Prospected(ID, compagnyName, streetNumber, streetName, postalCode,
+            prospect = new Prospected(ID, compagnyName, streetNumber, streetName, postalCode,
                     city, phoneNumber, email, comment, dateOfProspection, interested);
-            prospectedList.add(item);
+            //we give all the information of the fields, contain into the object prospect.
+            // In the DAO we extract those information and make the necessary update
+            DAOProspect.create(prospect);
+            LOGGER.info("Creation of a new prospect succesfull : " + prospect);
             backToBaseScreen();
 
         } catch (DateTimeParseException e) {
@@ -591,7 +661,7 @@ public class CreateModifyDeleteFrame extends JFrame {
             confirmationDeletingLabel.setText("Error : date invalid.");
             confirmationDeletingLabel.setFont(new Font("Serif", Font.PLAIN, 20));
             confirmationDeletingLabel.setForeground(Color.red);
-
+            LOGGER.error("Error parsing date in creation of a new client");
 
         } catch (ExceptionHandler eh) {
             confirmationPanel.setVisible(true);
@@ -601,10 +671,9 @@ public class CreateModifyDeleteFrame extends JFrame {
             confirmationDeletingLabel.setText("Error : " + eh.getMessage());
             confirmationDeletingLabel.setFont(new Font("Serif", Font.PLAIN, 20));
             confirmationDeletingLabel.setForeground(Color.red);
-
-
+            LOGGER.error("Error with ExceptionHandler in confirmCreationOfANewProspect : " + eh);
         } catch (Exception e) {
-            System.out.println("Exception inconnu");
+            LOGGER.fatal("Error create prospect, exception inconnu : " + e);
             System.exit(1);
         }
 
@@ -619,6 +688,7 @@ public class CreateModifyDeleteFrame extends JFrame {
         // getting all the information typed by user in the TextFields, and we check if they are conform
         // to our set of rules. If they are a the selected prospect is modify
 
+        int ID = Integer.parseInt(IDTextField.getText());
         String compagnyName = compagnySNameTextField.getText();
         String comment = commentsTextField.getText();
         String city = cityTextField.getText();
@@ -640,15 +710,19 @@ public class CreateModifyDeleteFrame extends JFrame {
             selectedProspect.setPhoneNumber(phoneNumber);
             LocalDate date = StringToDate(prospectingDate);
             selectedProspect.setProspectingDate(date);
+
             if (comboBoxYesOrNo.getSelectedIndex() == 0) {
-                prospectedList.get(prospectedList.indexOf(selectedProspect)).setProspectedInterested("0");
+                selectedProspect.setProspectedInterested("0");
             }
             if (comboBoxYesOrNo.getSelectedIndex() == 1) {
-                prospectedList.get(prospectedList.indexOf(selectedProspect)).setProspectedInterested("1");
+                selectedProspect.setProspectedInterested("1");
             } else {
                 System.out.println("Error comboBox");
                 System.exit(1);
             }
+
+            //get the information into prospect and his id to update the right prospect
+            DAOProspect.save(selectedProspect, ID);
             backToBaseScreen();
 
         } catch (DateTimeParseException dfe) {
@@ -659,6 +733,7 @@ public class CreateModifyDeleteFrame extends JFrame {
             confirmationDeletingLabel.setText("Error : Watch out if your date is ok");
             confirmationDeletingLabel.setFont(new Font("Serif", Font.PLAIN, 20));
             confirmationDeletingLabel.setForeground(Color.red);
+            LOGGER.error("Error with modify on date text field input : " + dfe);
 
 
         } catch (NumberFormatException e) {
@@ -669,7 +744,7 @@ public class CreateModifyDeleteFrame extends JFrame {
             confirmationDeletingLabel.setText("Error : " + e.getMessage());
             confirmationDeletingLabel.setFont(new Font("Serif", Font.PLAIN, 20));
             confirmationDeletingLabel.setForeground(Color.red);
-
+            LOGGER.error("Error NumberFormatException " + e);
 
         } catch (ExceptionHandler eh) {
             confirmationPanel.setVisible(true);
@@ -679,11 +754,10 @@ public class CreateModifyDeleteFrame extends JFrame {
             confirmationDeletingLabel.setText("Error : " + eh.getMessage());
             confirmationDeletingLabel.setFont(new Font("Serif", Font.PLAIN, 20));
             confirmationDeletingLabel.setForeground(Color.red);
+            LOGGER.error("Error with ExceptionHandler in modifyProspect : " + eh);
 
-
-            System.out.println(eh.getMessage());
         } catch (Exception e) {
-            System.out.println("Exception inconnu");
+            LOGGER.fatal("Error modify prospect, exception inconnu : " + e);
             System.exit(1);
         }
     }
@@ -694,9 +768,12 @@ public class CreateModifyDeleteFrame extends JFrame {
      * setEditableFalseAll lock all the textField to be uneditable
      */
     private void closeConfirmationPanel(ActionEvent event) {
-        confirmationPanel.setVisible(false);
+        confirmationPanel.setVisible(true);
     }
 
+    /**
+     * set all the field uneditable
+     */
     private void setEditableFalseAll() {
         IDTextField.setEditable(false);
         compagnySNameTextField.setEditable(false);
@@ -753,6 +830,14 @@ public class CreateModifyDeleteFrame extends JFrame {
         //Parsing the given String to Date object
         return LocalDate.from(dateFormatter.parse(dateInUSFormat.replace("/", "-")));
 
+    }
+
+    /**
+     * Method use to close properly application.
+     */
+    private void exit(ActionEvent event) {
+        this.dispose();
+        System.exit(0);
     }
 
 }

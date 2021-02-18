@@ -17,7 +17,7 @@ public class Prospected extends Society{
     private String prospectedInterested;
     public static int IDProspectedCount = 0;
 
-    public Prospected(int ID, String compagnyName, String streetNumber,
+    public Prospected(Integer ID, String compagnyName, String streetNumber,
                       String streetName, String postalCode, String city,
                       String phoneNumber, String email, String comments,
                       LocalDate prospectingDate, String prospectedInterested)
@@ -29,9 +29,13 @@ public class Prospected extends Society{
         this.setProspectingDate(prospectingDate);
         this.setProspectedInterested(prospectedInterested);
         this.setID(IDProspectedCount);
-        IDProspectedCount++;
 
     }
+
+    public Prospected() {
+
+    }
+
     public void setProspectingDate(LocalDate prospectingDate) throws ExceptionHandler{
 
 
@@ -79,7 +83,7 @@ public class Prospected extends Society{
         LocalDate dateToBeChanged = this.prospectingDate;
         String dateOfProspection = dateFormatter.format(dateToBeChanged);
         return super.toString() + "\nj'ai été appelé le " +  dateOfProspection +
-                "\net j'ai été intéréssé : " + this.prospectedInterested + "\n";
+                "\net j'ai été intéréssé : " + getProspectedInterested() + "\n";
     }
 
 }

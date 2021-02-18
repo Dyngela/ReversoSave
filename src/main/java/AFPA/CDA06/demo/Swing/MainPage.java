@@ -1,6 +1,12 @@
 package AFPA.CDA06.demo.Swing;
 
+import AFPA.CDA06.demo.DAO.DAOClient;
+import AFPA.CDA06.demo.DAO.DAOContract;
+import AFPA.CDA06.demo.DAO.DAOProspect;
 import AFPA.CDA06.demo.Entities.*;
+import AFPA.CDA06.demo.Exception.ExceptionHandler;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 import javax.swing.*;
@@ -8,9 +14,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.Serializable;
+import java.sql.SQLException;
 
-import static AFPA.CDA06.demo.Entities.ArrayListClient.clientList;
-import static AFPA.CDA06.demo.Entities.ArrayListProspect.prospectedList;
+
+import static AFPA.CDA06.demo.Entities.ArrayListClientDAO.clientArrayList;
+import static AFPA.CDA06.demo.Entities.ArrayListContractDAO.clientWithContractList;
+import static AFPA.CDA06.demo.Entities.ArrayListProspectDAO.prospectedArrayList;
 
 
 /**
@@ -37,9 +46,12 @@ public class MainPage extends JFrame {
     private JButton buttonCancel;
     private JButton buttonCancelRight;
     private JLabel comboBoxErrorLabel;
+    private JButton buttonDisplayContract;
+    private JButton buttonExit;
     private final Client emptyObjectClient = null;
     private final Prospected emptyObjectProspect = null;
 
+    private static final Logger LOGGER = LogManager.getLogger(MainPage.class.getName());
 
     /**
      * Constructor.
@@ -60,6 +72,14 @@ public class MainPage extends JFrame {
                 MainPage.this.backToBaseScreen(event);
             }
         });
+
+        buttonExit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                MainPage.this.exit(event);
+            }
+        });
+
         buttonCancel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
@@ -92,8 +112,7 @@ public class MainPage extends JFrame {
             }
         });
 
-        clientList.sort(new SortByName.SortByNameThenGrossSale());
-        prospectedList.sort(new SortByName.SortByNameThenInterested());
+
 
         buttonCreateANew.addActionListener(new ActionListener() {
             @Override
@@ -116,12 +135,25 @@ public class MainPage extends JFrame {
         buttonDisplay.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-                MainPage.this.display(event);
+
+                try {
+                    MainPage.this.display(event);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    LOGGER.fatal("Error in main page display " + e);
+                }
+
+            }
+        });
+        buttonDisplayContract.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                MainPage.this.displayContract(event);
             }
         });
 
-
     }
+
 
 
     //Prospect button section.
@@ -134,6 +166,20 @@ public class MainPage extends JFrame {
 
         baseScreen();
         emptyComboBox();
+        try {
+
+            //DAOClient.findAll() and DAOContract.findAll() are used to filled the arrayList of client and contract.
+            //So we can use it with comboBox to display what we want and being able to select client or contract needed
+            //We also sort it alphabeticly so it appears right in the comboBox
+            DAOClient.findAll();
+            clientArrayList.sort(new SortByName.SortByNameThenGrossSale());
+
+            DAOContract.findAll();
+            clientWithContractList.sort(new SortByName.SortByNameThenGrossSale());
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            LOGGER.fatal("Error retriving data with find all contract or client in the MainPage " + exception);
+        }
 
         comboBoxErrorLabel.setVisible(false);
 
@@ -154,17 +200,23 @@ public class MainPage extends JFrame {
         buttonCancel.setText("Cancel");
         buttonCancel.setEnabled(true);
 
+        buttonDisplayContract.setText("Client's contract");
+        buttonDisplayContract.setEnabled(true);
+
         comboBoxErrorLabel.setText("No customer found!");
         comboBoxErrorLabel.setVisible(false);
 
-
+        if(clientWithContractList.isEmpty()){
+            buttonDisplayContract.setEnabled(false);
+        }
 //        Checking if the list is empty, you can't display client's list or delete/modify one
-        if (clientList.isEmpty()) {
+        if (clientArrayList.isEmpty()) {
             emptyComboBox();
             comboBoxErrorLabel.setVisible(true);
             buttonDisplay.setEnabled(false);
             buttonDelete.setEnabled(false);
             buttonModify.setEnabled(false);
+            buttonDisplayContract.setEnabled(false);
         }
 
     }
@@ -177,6 +229,17 @@ public class MainPage extends JFrame {
 
         baseScreen();
         emptyComboBox();
+        try {
+
+            //DAOProspect.findAll() is used to filled the arrayList of prospect
+            //So we can use it with comboBox to display what we want and being able to select prospect needed
+            //We also sort it alphabeticly so it appears right in the comboBox
+            DAOProspect.findAll();
+            prospectedArrayList.sort(new SortByName.SortByNameThenInterested());
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            LOGGER.fatal("Error retriving data with find all prospect in the MainPage " + exception);
+        }
         comboBoxErrorLabel.setVisible(false);
 
         buttonCustomersManagement.setEnabled(false);
@@ -198,12 +261,15 @@ public class MainPage extends JFrame {
         buttonCancel.setVisible(true);
         buttonCancel.setEnabled(true);
 
+        buttonDisplayContract.setVisible(false);
+        buttonDisplayContract.setEnabled(false);
+
         comboBoxErrorLabel.setText("No prospect found!");
         comboBoxErrorLabel.setVisible(false);
 
 
 //        Checking if the list is empty, you can't display prospect's list or delete/modify one
-        if (prospectedList.isEmpty()) {
+        if (prospectedArrayList.isEmpty()) {
             emptyComboBox();
             comboBoxErrorLabel.setVisible(true);
             buttonDisplay.setEnabled(false);
@@ -222,7 +288,6 @@ public class MainPage extends JFrame {
      **/
     private void createANew(ActionEvent event) {
 
-
         if (event.getActionCommand().equals("Create a new prospect")) {
             CreateModifyDeleteFrame createProspect = new CreateModifyDeleteFrame
                     ("Create", emptyObjectProspect);
@@ -233,7 +298,7 @@ public class MainPage extends JFrame {
             this.dispose();
             createClient.setVisible(true);
         } else {
-            System.out.println("Problem with create a new");
+            LOGGER.error("Problem with create a new");
             System.exit(1);
         }
     }
@@ -270,7 +335,7 @@ public class MainPage extends JFrame {
             buttonOK.setText("Confirm Modify client's selected");
             buttonCancelRight.setEnabled(true);
         } else {
-            System.out.println("Problem with Modify");
+            LOGGER.error("Problem with Modify from MainPage");
             System.exit(1);
         }
     }
@@ -287,7 +352,7 @@ public class MainPage extends JFrame {
 
         if (event.getActionCommand().equals("Delete a prospect")) {
 
-            emptyComboBox();
+            //emptyComboBox();
             comboBoxManagementProspect();
             buttonCreateANew.setEnabled(false);
             buttonModify.setEnabled(false);
@@ -300,7 +365,7 @@ public class MainPage extends JFrame {
 
         } else if (event.getActionCommand().equals("Delete a customer")) {
 
-            emptyComboBox();
+            //emptyComboBox();
             comboBoxManagementClient();
             buttonCreateANew.setEnabled(false);
             buttonModify.setEnabled(false);
@@ -311,7 +376,7 @@ public class MainPage extends JFrame {
             buttonOK.setText("Confirm Delete client's selected");
 
         } else {
-            System.out.println("Problem with Delete");
+            LOGGER.error("Problem with delete from MainPage");
             System.exit(1);
         }
 
@@ -322,12 +387,15 @@ public class MainPage extends JFrame {
      * if display button is pressed.
      * Close that frame and open DisplayFrame frame.
      **/
-    private void display(ActionEvent event) {
+    private void display(ActionEvent event) throws Exception {
 
         if (event.getActionCommand().equals("Display prospect list")) {
 
             String identifierProspectedDisplay = null;
-            DisplayFrame displayProspectList = new DisplayFrame(identifierProspectedDisplay);
+            DisplayFrame displayProspectList = null;
+
+                displayProspectList = new DisplayFrame(identifierProspectedDisplay);
+
             displayProspectList.setVisible(true);
             this.dispose();
         } else if (event.getActionCommand().equals("Display customer list")) {
@@ -335,10 +403,26 @@ public class MainPage extends JFrame {
             displayClientList.setVisible(true);
             this.dispose();
         } else {
-            System.out.println("Problem with Display");
+            LOGGER.error("Problem with Display");
             System.exit(1);
         }
     }
+
+    private void displayContract(ActionEvent event) {
+        emptyComboBox();
+        comboBoxManagementContract();
+        buttonCreateANew.setEnabled(false);
+        buttonModify.setEnabled(false);
+        buttonDelete.setEnabled(false);
+        buttonDisplay.setEnabled(false);
+        comboBox.setEnabled(true);
+        buttonCancelRight.setEnabled(true);
+        buttonOK.setEnabled(true);
+        buttonOK.setText("Confirm");
+
+        comboBoxManagementContract();
+    }
+
 
 
     /**
@@ -356,6 +440,7 @@ public class MainPage extends JFrame {
         buttonDelete.setEnabled(true);
         buttonDisplay.setEnabled(true);
         buttonCancel.setEnabled(true);
+        buttonDisplayContract.setEnabled(false);
     }
 
 
@@ -376,28 +461,34 @@ public class MainPage extends JFrame {
     private void buttonOKListenner(ActionEvent event) {
         switch (event.getActionCommand()) {
             case "Confirm Modify prospect's selected":
-                CreateModifyDeleteFrame modifyProspect = new CreateModifyDeleteFrame("Modify", ArrayListProspect.
-                        getProspespectedList().get(comboBox.getSelectedIndex()));
+                CreateModifyDeleteFrame modifyProspect = new CreateModifyDeleteFrame("Modify", ArrayListProspectDAO.
+                        getProspectListDAO().get(comboBox.getSelectedIndex()));
                 this.dispose();
                 modifyProspect.setVisible(true);
                 break;
             case "Confirm Modify client's selected":
-                CreateModifyDeleteFrame modifyClient = new CreateModifyDeleteFrame(ArrayListClient.
-                        getClientList().get(comboBox.getSelectedIndex()), "Modify");
+                CreateModifyDeleteFrame modifyClient = new CreateModifyDeleteFrame(ArrayListClientDAO.
+                        getClientListDAO().get(comboBox.getSelectedIndex()), "Modify");
                 this.dispose();
                 modifyClient.setVisible(true);
                 break;
             case "Confirm Delete prospect's selected":
-                CreateModifyDeleteFrame deleteProspect = new CreateModifyDeleteFrame("Delete", ArrayListProspect.
-                        getProspespectedList().get(comboBox.getSelectedIndex()));
+                CreateModifyDeleteFrame deleteProspect = new CreateModifyDeleteFrame("Delete", ArrayListProspectDAO.
+                        getProspectListDAO().get(comboBox.getSelectedIndex()));
                 this.dispose();
                 deleteProspect.setVisible(true);
                 break;
             case "Confirm Delete client's selected":
-                CreateModifyDeleteFrame deleteClient = new CreateModifyDeleteFrame(ArrayListClient.
-                        getClientList().get(comboBox.getSelectedIndex()), "Delete");
+                CreateModifyDeleteFrame deleteClient = new CreateModifyDeleteFrame(ArrayListClientDAO.
+                        getClientListDAO().get(comboBox.getSelectedIndex()), "Delete");
                 this.dispose();
                 deleteClient.setVisible(true);
+                break;
+            case "Confirm":
+                ContractListFrame watchContract = new ContractListFrame(ArrayListClientDAO.
+                        getClientListDAO().get(comboBox.getSelectedIndex()));
+                this.dispose();
+                watchContract.setVisible(true);
                 break;
             default:
                 System.out.println("Problem button ok listenner");
@@ -414,11 +505,7 @@ public class MainPage extends JFrame {
      * Usefull when you switch from one section for an another.
      * e.g. You switch from client management to prospect management.
      **/
-    private void emptyComboBox() {
-
-        comboBox.removeAllItems();
-
-    }
+    private void emptyComboBox() { comboBox.removeAllItems(); }
 
 
     /**
@@ -433,13 +520,22 @@ public class MainPage extends JFrame {
         buttonCancelRight.setVisible(true);
         buttonOK.setVisible(true);
 
-        for (Client client : clientList) {
-
+        for (Client client : clientArrayList) {
             comboBox.addItem(client.getCompagnyName());
-
         }
-        clientList.sort(new SortByName.SortByNameThenGrossSale());
     }
+
+    private void comboBoxManagementContract() {
+
+        comboBox.setVisible(true);
+        buttonCancelRight.setVisible(true);
+        buttonOK.setVisible(true);
+        emptyComboBox();
+        for (Client client : clientWithContractList) {
+            comboBox.addItem(client.getCompagnyName());
+        }
+    }
+
 
 
     /**
@@ -454,12 +550,9 @@ public class MainPage extends JFrame {
         buttonCancelRight.setVisible(true);
         buttonOK.setVisible(true);
 
-        for (Prospected prospect : prospectedList) {
-
+        for (Prospected prospect : prospectedArrayList) {
             comboBox.addItem(prospect.getCompagnyName());
-
         }
-        prospectedList.sort(new SortByName.SortByNameThenInterested());
     }
 
 
@@ -501,6 +594,8 @@ public class MainPage extends JFrame {
 
         comboBoxErrorLabel.setVisible(false);
 
+        buttonDisplayContract.setEnabled(false);
+
         buttonCancel.setEnabled(false);
         comboBox.setEnabled(false);
         buttonOK.setEnabled(false);
@@ -509,6 +604,14 @@ public class MainPage extends JFrame {
         buttonCustomersManagement.setEnabled(true);
         buttonProspectsManagement.setEnabled(true);
 
+    }
+
+    /**
+     * Method use to close properly application.
+     */
+    private void exit(ActionEvent event) {
+        this.dispose();
+        System.exit(0);
     }
 }
 

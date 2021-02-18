@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: AFPA.CDA06.demo.AppTest
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.025 s - in AFPA.CDA06.demo.AppTest
+Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.07 s - in AFPA.CDA06.demo.AppTest
