@@ -60,6 +60,7 @@ public class DAOProspect implements DAO{
         } catch (Exception e){
             e.printStackTrace();
             LOGGER.fatal("Erreur fatal findall prospect " + e);
+            throw new ExceptionHandler("Erreur fatal findall prospect");
         }
     }
 
@@ -67,7 +68,7 @@ public class DAOProspect implements DAO{
      * Method to find every info of a prospect according to his society name
      * @param Society_Name name of the prospect
      */
-    public static void find(String Society_Name){
+    public static void find(String Society_Name) throws ExceptionHandler {
         try{
 
             connection = ConnexionManager.getConnection();
@@ -99,6 +100,7 @@ public class DAOProspect implements DAO{
         } catch (Exception e){
             e.printStackTrace();
             LOGGER.fatal("Erreur fatal find prospect " + e);
+            throw new ExceptionHandler("Erreur fatal find prospect");
         }
     }
 
@@ -106,7 +108,7 @@ public class DAOProspect implements DAO{
      * Method to create a prospect and insert it into database.
      * @param prospect The prospect we want to insert into database
      */
-    public static void create(Prospected prospect){ //insert enregistrement
+    public static void create(Prospected prospect) throws ExceptionHandler { //insert enregistrement
 
         try {
             connection = ConnexionManager.getConnection();
@@ -142,6 +144,7 @@ public class DAOProspect implements DAO{
         }catch (Exception e){
             e.printStackTrace();
             LOGGER.fatal("Error create prospect " + e);
+            throw new ExceptionHandler("Error create prospect ");
         }
     }
 
@@ -150,7 +153,7 @@ public class DAOProspect implements DAO{
      * @param prospect Object containing all the information to update
      * @param ID_Prospect ID of the prospect to update
      */
-    public static void save(Prospected prospect, int ID_Prospect){ //update enregistrement
+    public static void save(Prospected prospect, int ID_Prospect) throws ExceptionHandler { //update enregistrement
         try {
             connection = ConnexionManager.getConnection();
 
@@ -193,6 +196,7 @@ public class DAOProspect implements DAO{
         }catch (Exception e){
             e.printStackTrace();
             LOGGER.fatal("L'update à échoué " + e);
+            throw new ExceptionHandler("L'update à échoué");
         }
     }
 
@@ -200,7 +204,7 @@ public class DAOProspect implements DAO{
      * Method to delete a prospect according to his ID
      * @param prospected object to be deleted
      */
-    public static void delete(Prospected prospected) { //delete enregistrement
+    public static void delete(Prospected prospected) throws ExceptionHandler { //delete enregistrement
         try {
 
             connection = ConnexionManager.getConnection();
@@ -213,6 +217,8 @@ public class DAOProspect implements DAO{
         }catch (Exception e){
             e.printStackTrace();
             LOGGER.error("La suppression à échoué " + e);
+            throw new ExceptionHandler("La suppression à échoué");
+
         }
     }
 
@@ -223,7 +229,7 @@ public class DAOProspect implements DAO{
      * @param prospect Object created or updated
      * @param ID ID of prospect, deciding if either it create or update
      */
-    public static void createAndSave(Prospected prospect, Integer ID){
+    public static void createAndSave(Prospected prospect, Integer ID) throws ExceptionHandler {
         try {
 
             connection = ConnexionManager.getConnection();
@@ -297,6 +303,7 @@ public class DAOProspect implements DAO{
         }catch (Exception e){
             e.printStackTrace();
             System.out.println("Echec de CreateAndSave method");
+            throw new ExceptionHandler("Echec de CreateAndSave method");
         }
     }
 
@@ -305,7 +312,7 @@ public class DAOProspect implements DAO{
      * it'll still give last ID passing by an another table who stock that very ID
      * @return Return the last ID of prospect table
      */
-    public static Integer maxIDProspect(){
+    public static Integer maxIDProspect() throws ExceptionHandler {
         try {
             connection = ConnexionManager.getConnection();
             String query = "Select MAX(ID_Prospect) as maxID from ID_Prospect";
@@ -321,8 +328,9 @@ public class DAOProspect implements DAO{
         }catch (Exception e){
             e.printStackTrace();
             LOGGER.error("Problème avec maxID_Prospect " + e);
+            throw new ExceptionHandler("Problème avec maxID_Prospect");
+
         }
-        return null;
     }
 }
 

@@ -22,7 +22,7 @@ public class DAOContract {
      * Method invoc to select all the contracts of a given client.
      * @param ID_Client the ID of client we want to see contract from
      */
-    public static void findByIDClient(Integer ID_Client) {
+    public static void findByIDClient(Integer ID_Client) throws ExceptionHandler {
 
         try {
             connection = ConnexionManager.getConnection();
@@ -48,7 +48,8 @@ public class DAOContract {
             LOGGER.info("FindIDByClient from daocontract done properly");
         }catch (Exception E){
             E.printStackTrace();
-            LOGGER.error("Error FindByIdClient from DAOContract");
+            LOGGER.error("Error FindByIdClient from DAOContract " + E);
+            throw new ExceptionHandler("Error FindByIdClient from DAOContract");
         }
     }
 
@@ -56,7 +57,7 @@ public class DAOContract {
      * Method to list every Client who has a contract linked. It's temporary stocked in an arrayList, clientWithContractList,
      * for display purposes in the MainPage comboBox, and in ContractListFrame.
      */
-    public static void findAll() {
+    public static void findAll() throws ExceptionHandler {
         try{
             connection = ConnexionManager.getConnection();
 
@@ -79,6 +80,8 @@ public class DAOContract {
         }catch (Exception e){
             e.printStackTrace();
             LOGGER.error("Error findall contract" + e);
+            throw new ExceptionHandler("Error findall contract");
+
         }
     }
 }

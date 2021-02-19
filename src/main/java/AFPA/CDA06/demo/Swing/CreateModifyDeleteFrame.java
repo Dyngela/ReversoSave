@@ -122,7 +122,12 @@ public class CreateModifyDeleteFrame extends JFrame {
 
                 //maxIDClient actually look for a table who register the last id of client table.
                 // We do + 1 to display the next ID we're going to create if user confirm creation
-                IDTextField.setText(String.valueOf(DAOClient.maxIDClient() + 1));
+                try {
+                    IDTextField.setText(String.valueOf(DAOClient.maxIDClient() + 1));
+                } catch (ExceptionHandler exceptionHandler) {
+                    exceptionHandler.printStackTrace();
+                    LOGGER.error("Error with getting last maxID client");
+                }
 
                 comboBoxYesOrNo.setVisible(false);
                 confirmationPanel.setVisible(false);
@@ -188,7 +193,12 @@ public class CreateModifyDeleteFrame extends JFrame {
                     public void actionPerformed(ActionEvent e) {
                         clientArrayList.remove(selectedClient);
                         //call the DAODelete to actually delete it in the database
-                        DAOClient.delete(selectedClient);
+                        try {
+                            DAOClient.delete(selectedClient);
+                        } catch (ExceptionHandler exceptionHandler) {
+                            exceptionHandler.printStackTrace();
+                            LOGGER.error("error with deleting a client");
+                        }
                     }
                 });
                 buttonYes.addActionListener(new ActionListener() {
@@ -305,7 +315,12 @@ public class CreateModifyDeleteFrame extends JFrame {
                 titleLabel.setText("Creation of a new prospect : ");
                 //maxIDClient actually look for a table who register the last id of client table.
                 // We do + 1 to display the next ID we're going to create if user confirm creation
-                IDTextField.setText(String.valueOf(DAOProspect.maxIDProspect() + 1));
+                try {
+                    IDTextField.setText(String.valueOf(DAOProspect.maxIDProspect() + 1));
+                } catch (ExceptionHandler exceptionHandler) {
+                    exceptionHandler.printStackTrace();
+                    LOGGER.error("error daoprospect to get the maxid ");
+                }
                 grossSaleOrDateLabel.setText("Date of prospection :");
                 numberOfEmployeeOrInterestedLabel.setText("Interested : ");
                 createDelModButton.setText("Create");
@@ -377,7 +392,12 @@ public class CreateModifyDeleteFrame extends JFrame {
                     public void actionPerformed(ActionEvent e) {
                         prospectedArrayList.remove(selectedProspect);
                         //call the DAODelete to actually delete it in the database
-                        DAOProspect.delete(selectedProspect);
+                        try {
+                            DAOProspect.delete(selectedProspect);
+                        } catch (ExceptionHandler exceptionHandler) {
+                            exceptionHandler.printStackTrace();
+                            LOGGER.error("error with deleting a prospect");
+                        }
                     }
                 });
                 buttonHomePage.addActionListener(new ActionListener() {

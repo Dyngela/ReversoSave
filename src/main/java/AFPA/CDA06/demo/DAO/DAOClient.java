@@ -7,6 +7,8 @@ import AFPA.CDA06.demo.Entities.Contract;
 
 import java.sql.*;
 import java.util.ArrayList;
+
+import AFPA.CDA06.demo.Exception.ExceptionHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -64,7 +66,7 @@ public class DAOClient implements DAO{
      * Method to find every info of a client according to his society name
      * @param Society_Name name of the client
      */
-    public static void find(String Society_Name){
+    public static void find(String Society_Name) throws ExceptionHandler {
         try{
             connection = ConnexionManager.getConnection();
 
@@ -100,12 +102,12 @@ public class DAOClient implements DAO{
                     System.out.println(client);
                 }
             }else {
-                System.out.println("Dysfonctionnement find client");
                 LOGGER.error("Error in find client, didn't work as expected");
             }
         } catch (Exception e){
             e.printStackTrace();
             LOGGER.fatal("Fatal error find client " + e);
+            throw new ExceptionHandler("Fatal error find client");
         }
     }
 
@@ -113,7 +115,7 @@ public class DAOClient implements DAO{
      * Method to create a client and insert it into database.
      * @param client The client we want to insert into database
      */
-    public static void create(Client client) { //insert enregistrement
+    public static void create(Client client) throws ExceptionHandler { //insert enregistrement
 
         try {
 
@@ -144,6 +146,7 @@ public class DAOClient implements DAO{
         catch (Exception e){
             e.printStackTrace();
             LOGGER.fatal("La création à échouer " + e);
+            throw new ExceptionHandler("La création à échouer");
         }
     }
 
@@ -152,7 +155,7 @@ public class DAOClient implements DAO{
      * @param client Object containing all the information to update
      * @param ID_Client ID of the client to update
      */
-    public static void save(Client client, int ID_Client){ //update enregistrement
+    public static void save(Client client, int ID_Client) throws ExceptionHandler { //update enregistrement
         try {
             connection = ConnexionManager.getConnection();
 
@@ -188,6 +191,7 @@ public class DAOClient implements DAO{
         }catch (Exception e){
             e.printStackTrace();
             LOGGER.fatal("L'update client à échoué " + e);
+            throw new ExceptionHandler("L'update client à échoué");
         }
     }
 
@@ -195,7 +199,7 @@ public class DAOClient implements DAO{
      * Method to delete a client according to his ID
      * @param client object to be deleted
      */
-    public static void delete(Client client){ //delete enregistrement
+    public static void delete(Client client) throws ExceptionHandler { //delete enregistrement
             try {
                 connection = ConnexionManager.getConnection();
                 String query = "delete from client where ID = ?";
@@ -206,6 +210,7 @@ public class DAOClient implements DAO{
             }catch (Exception e){
                 e.printStackTrace();
                 LOGGER.fatal("La suppression à échoué" + e);
+                throw new ExceptionHandler("La suppression à échoué");
             }
         }
 
@@ -216,7 +221,7 @@ public class DAOClient implements DAO{
      * @param client Object created or updated
      * @param ID ID of client, deciding if either it create or update
      */
-    public static void createAndSave(Client client, int ID){
+    public static void createAndSave(Client client, int ID) throws ExceptionHandler {
         try {
             connection = ConnexionManager.getConnection();
             String query = "Select MAX(ID) as maxID from CLIENT";
@@ -267,6 +272,7 @@ public class DAOClient implements DAO{
         }catch (Exception e){
             e.printStackTrace();
             LOGGER.fatal("Echec de CreateAndSave method" + e);
+            throw new ExceptionHandler("Echec de CreateAndSave method");
         }
     }
 
@@ -275,7 +281,7 @@ public class DAOClient implements DAO{
      * it'll still give last ID passing by an another table who stock that very ID
      * @return Return the last ID of client table
      */
-    public static Integer maxIDClient(){
+    public static Integer maxIDClient() throws ExceptionHandler {
         try {
             connection = ConnexionManager.getConnection();
             String query = "Select MAX(ID_Client) as maxID from id_client";
@@ -291,8 +297,8 @@ public class DAOClient implements DAO{
         }catch (Exception e){
             e.printStackTrace();
             LOGGER.error("Problème avec maxIDClient " + e);
+            throw new ExceptionHandler("Problème avec maxIDClient");
         }
-        return null;
     }
 
 }
